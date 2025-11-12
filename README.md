@@ -1,1 +1,0 @@
-# Auto-Scaling-Group-with-ALB
