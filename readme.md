@@ -13,7 +13,7 @@ Each target group is associated with an **Auto Scaling Group** that manages comp
 ---
 
 ##  Architecture  
-   ![alt text](asg2.drawio.png)
+   ![alt text](<Untitled Diagram.drawio.png>)
 
 ---
 
@@ -47,11 +47,10 @@ Each target group is associated with an **Auto Scaling Group** that manages comp
  2. Fill in:
        - **Template Name**: Home-LT
        - **Description** : This is my Home instance
-       - ![alt text](1-2.PNG)
+         ![alt text](1.1.PNG)
        - **AMI ID**: Use Amazon Linux 2 AMI
        - **Instance Type**: t3.micro
        - **Key Pair**: Select your existing key or create a new one
-       - ![alt text](3-1.PNG)
        - **Security Group**: Allow ports 22 (SSH) and 80 (HTTP)
 
  3. In Advanced Details → paste this User Data script:
@@ -97,7 +96,7 @@ Each target group is associated with an **Auto Scaling Group** that manages comp
  4. lick Create launch template
 
 - Launch templates are created succesfully :
-    -    ![alt text](6-2.PNG)
+   ![alt text](6.PNG)
 ---
 
 ## Step 2: Create Target Groups
@@ -116,7 +115,7 @@ Each target group is associated with an **Auto Scaling Group** that manages comp
 5. Click **Create**.
 
   - **Do this **two times** — one for each (Laptop, Mobile).**
-  - ![alt text](14-1.PNG)
+  - ![alt text](14.PNG)
 ---
 
 ## Step 3: Create Auto Scaling Groups
@@ -128,11 +127,11 @@ Do this three times with different scaling types:
 1. Go to **EC2 Console** → **Auto Scaling Groups** → **Create**.
 2. Group Name: **Home-ASG**
 3. Attach to Launch Template: **Home-LT**
-        ![alt text](8-1.PNG)
+        ![alt text](8.PNG)
  4. Choose VPC and Subnets.
-        ![alt text](9-4.PNG)
+        ![alt text](9.PNG)
 4. Desired, Min, Max capacity: Set all to **2**  
-    ![alt text](10.PNG)
+     ![alt text](10.PNG)
 5. Skip scaling policies (static)
 6. Create ASG.
 
@@ -148,7 +147,6 @@ Do this three times with different scaling types:
    - Choose **Target tracking scaling policy**
    - Metric: Average CPU Utilization
    - Target Value: 50%
-   - ![alt text](11-1.PNG)
 5. Create ASG.
 
 **Mobile Auto Scaling Group (SCHEDULED)**
@@ -166,13 +164,12 @@ Do this three times with different scaling types:
 5. Create ASG.
    
  #### - Review the ASG 
- - ![alt text](12.PNG) 
+ ![alt text](15.PNG)
 
 ---
 ## Step 4: Make Mobile-ASG a Scheduled Action
  1. Go to Mobile-ASG → scroll down to Scheduled actions.
  2. Click Create scheduled action.
-        ![alt text](16-2.PNG)
  3. Enter Name = **BigBillionSale**.
  4. Set the Capacity values:
       - Min = 5
@@ -184,8 +181,9 @@ Do this three times with different scaling types:
  6. Under End By, set the end date and time:
     - **Date: 2025/10/31**
     - **Time: 10:30**
-    - ![alt text](17-1.PNG)
+    - ![alt text](17.PNG)
  7. Click **Create**.
+     ![alt text](18.PNG)
 ---
 
 
@@ -194,7 +192,6 @@ Do this three times with different scaling types:
 1. Go to the **Auto Scaling Groups** section in the AWS Console.  
 2. Select the **Mobile-ASG**.  
 3. Click on **Actions** → **Edit**.  
-        ![alt text](19.PNG)
 4. In the **Load balancing** section, choose:  
    - **Application**, **Network**, or **Gateway** Load Balancer target groups (depending on your setup).  
 5. Add the **Mobile-TG** to the Auto Scaling Group.  
@@ -208,24 +205,21 @@ Do this three times with different scaling types:
 
 1. Go to **EC2 Console** → **Load Balancers** → **Create Load Balancer**.
 2. Choose **Application Load Balancer**.
-        ![alt text](21-1.PNG)
+        ![alt text](21.PNG)
 3. Provide:
    - **Name**: ALB  
    - **Scheme**: Internet-facing  
    - **IP address type**: IPv4  
-   - ![alt text](22.PNG)
 4. Configure **listeners:**
    - **Protocol**: HTTP
    - **Port**: 80
 5. In **Default action**, select **Forward to Target Groups** → choose **Home-TG**. 
    - ![alt text](23.PNG)
-5. Select at least **two public subnets**.
-        ![alt text](image-1.png)
-6. Configure **Security Group**:
+6. Select at least **two public subnets**.
+7. Configure **Security Group**:
      - Allow inbound **HTTP (80)** traffic. 
-     -  ![alt text](image-2.png)
-7. Leave **Target Groups** rules for later (do not configure at this step).
-8. Click **Create**.
+8. Leave **Target Groups** rules for later (do not configure at this step).
+9. Click **Create**.
 
 ---
 
@@ -233,24 +227,24 @@ Do this three times with different scaling types:
 
 1. Go to the **Listeners** tab of the ALB.  
 2. Click on the listener (**HTTP: 80**) → **View/Edit rules**.  
-        ![alt text](24-1.PNG)
+        ![alt text](24.PNG)
 3. Add a new rule to route traffic:  
    - **Name/Tag**: mobile-rule  
    - **Condition**: Select **Path** → set path as /mobile/* 
-   - ![alt text](25.PNG)
+  ![alt text](25.PNG)
    - **Action**: Forward to **Mobile-TG**  
-   - ![alt text](26.PNG)
+  ![alt text](26.PNG)
    - Click **Next**  
    - Set **Priority** = 1  
    - Click **Next** → **Add rule**  
 
-4. Repeat the same process for the **Laptop-TG**:  
+1. Repeat the same process for the **Laptop-TG**:  
    - **Name/Tag**: laptop-rule  
    - **Condition**: Path = /laptop/*  
    - **Action**: Forward to **Laptop-TG**  
    - Assign the next available **Priority** (e.g., 2).  
 
-5. Save the rules to apply changes.  
+2. Save the rules to apply changes.  
 ---
 
  ## Step 8: Test the ALB Setup  
@@ -258,14 +252,14 @@ Do this three times with different scaling types:
 1. Go to the **EC2 Console** → **Load Balancers**.  
 2. Select your **Application Load Balancer (ALB)**.  
 3. Copy the **DNS name** of the ALB (e.g., ALB-123456789.ap-south-1.elb.amazonaws.com).  
-        ![alt text](28-1.PNG)
+      ![alt text](28.1.png)
 4. Open a browser and test the following paths:  
    - http://<ALB-DNS-Name> → should route to **Home-TG**.  
-    ![alt text](29-1.PNG)
+    ![alt text](29.PNG)
    - http://<ALB-DNS-Name>/mobile/ → should route to **Mobile-TG**.  
-    ![alt text](31-1.PNG)
+    ![alt text](31.PNG)
    - http://<ALB-DNS-Name>/laptop/ → should route to **Laptop-TG**.  
-    ![alt text](30-1.PNG)
+    ![alt text](30.PNG)
 ---
 
 ##  Conclusion  
