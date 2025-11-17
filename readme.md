@@ -13,7 +13,7 @@ Each target group is associated with an **Auto Scaling Group** that manages comp
 ---
 
 ##  Architecture  
-   ![alt text](<Untitled Diagram.drawio.png>)
+   ![Uploading asg2.drawio.png…]()
 
 ---
 
